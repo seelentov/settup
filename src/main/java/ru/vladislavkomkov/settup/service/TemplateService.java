@@ -1,11 +1,15 @@
 package ru.vladislavkomkov.settup.service;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
 import ru.vladislavkomkov.settup.model.Template;
 
 public interface TemplateService {
+    public static final Path TEMPLATES_FOLDER_PATH = Path.of("./templates");
+    
+    
     List<Template> getTemplates();
     
     Optional<String> getTemplate(String name);
