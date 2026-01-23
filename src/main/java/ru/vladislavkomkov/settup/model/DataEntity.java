@@ -20,12 +20,14 @@ public class DataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DataField> dataFields;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id")
     private DataTopic topic;
+    
+    private boolean isActive = true;
     
     public int getId() {
         return id;
@@ -49,5 +51,13 @@ public class DataEntity {
     
     public void setTopic(DataTopic topic) {
         this.topic = topic;
+    }
+    
+    public boolean isActive() {
+        return isActive;
+    }
+    
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

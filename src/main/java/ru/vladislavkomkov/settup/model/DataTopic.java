@@ -19,13 +19,13 @@ public class DataTopic {
     
     private String name;
     
-    private boolean isActive;
+    private boolean isActive = true;
     
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DataEntity> entities;
     
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DataField> scheme;
+    private List<DataTopicField> scheme;
     
     public int getId() {
         return id;
@@ -51,19 +51,19 @@ public class DataTopic {
         this.entities = entities;
     }
     
-    public List<DataField> getScheme() {
-        return scheme;
-    }
-    
-    public void setScheme(List<DataField> scheme) {
-        this.scheme = scheme;
-    }
-    
     public Boolean getActive() {
         return isActive;
     }
     
     public void setActive(Boolean active) {
         isActive = active;
+    }
+    
+    public List<DataTopicField> getScheme() {
+        return scheme;
+    }
+    
+    public void setScheme(List<DataTopicField> scheme) {
+        this.scheme = scheme;
     }
 }

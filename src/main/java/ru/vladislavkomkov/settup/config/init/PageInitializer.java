@@ -17,8 +17,6 @@ public class PageInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (pageService.getPage(PageService.HOME_PAGE_PATH).isEmpty()) {
-            
-            
             pageService.addPage(new Page(PageService.HOME_PAGE_PATH, PageService.HOME_PAGE_TEMPLATE));
         }
     }

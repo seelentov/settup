@@ -1,6 +1,5 @@
 package ru.vladislavkomkov.settup.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,53 +10,46 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "fields")
-public class DataField {
+@Table(name = "topic_fields")
+public class DataTopicField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
     private String name;
-    private String value;
     
     private DataFieldType type;
+    
+    private String defaultValue;
     
     private boolean isActive = true;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entity_id")
-    private DataEntity entity;
+    @JoinColumn(name = "topic_id")
+    private DataTopic topic;
     
-    public int getId() {
-        return id;
+    public DataTopic getTopic() {
+        return topic;
     }
     
-    public void setId(int id) {
-        this.id = id;
+    public void setTopic(DataTopic topic) {
+        this.topic = topic;
     }
     
-    public String getName() {
-        return name;
+    public boolean isActive() {
+        return isActive;
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public void setActive(boolean active) {
+        isActive = active;
     }
     
-    public String getValue() {
-        return value;
+    public String getDefaultValue() {
+        return defaultValue;
     }
     
-    public void setValue(String value) {
-        this.value = value;
-    }
-    
-    public DataEntity getEntity() {
-        return entity;
-    }
-    
-    public void setEntity(DataEntity entity) {
-        this.entity = entity;
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
     
     public DataFieldType getType() {
@@ -68,11 +60,19 @@ public class DataField {
         this.type = type;
     }
     
-    public boolean isActive() {
-        return isActive;
+    public String getName() {
+        return name;
     }
     
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 }
