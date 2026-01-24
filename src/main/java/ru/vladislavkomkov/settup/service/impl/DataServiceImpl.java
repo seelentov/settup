@@ -87,8 +87,8 @@ public class DataServiceImpl implements DataService {
         for (var entry : data.entrySet()) {
             DataField field = fieldMap.get(entry.getKey());
             String newValue = entry.getValue();
-            if (!Objects.equals(field.getValue(), newValue)) {
-                field.setValue(newValue);
+            if (!Objects.equals(field.getDataValue(), newValue)) {
+                field.setDataValue(newValue);
             }
         }
     }

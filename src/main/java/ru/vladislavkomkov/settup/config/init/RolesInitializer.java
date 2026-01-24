@@ -1,12 +1,12 @@
 package ru.vladislavkomkov.settup.config.init;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RolesInitializer implements CommandLineRunner {
-    private Role
-    
     @Override
     public void run(String... args) throws Exception {
-    
+
     }
 }

@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "topic_fields")
+@Table(name = "data_topic_fields")
 public class DataTopicField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class DataTopicField {
     private boolean isActive = true;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id")
+    @JoinColumn(name = "data_topic_id")
     private DataTopic topic;
     
     public DataTopic getTopic() {

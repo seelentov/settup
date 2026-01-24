@@ -14,7 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "entities")
+@Table(name = "data_entities")
 public class DataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class DataEntity {
     private List<DataField> dataFields;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id")
+    @JoinColumn(name = "data_topic_id")
     private DataTopic topic;
     
     private boolean isActive = true;

@@ -1,6 +1,5 @@
 package ru.vladislavkomkov.settup.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,21 +10,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "fields")
+@Table(name = "data_fields")
 public class DataField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
     private String name;
-    private String value;
+    private String dataValue;
     
     private DataFieldType type;
     
     private boolean isActive = true;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entity_id")
+    @JoinColumn(name = "data_entity_id")
     private DataEntity entity;
     
     public int getId() {
@@ -44,12 +43,12 @@ public class DataField {
         this.name = name;
     }
     
-    public String getValue() {
-        return value;
+    public String getDataValue() {
+        return dataValue;
     }
     
-    public void setValue(String value) {
-        this.value = value;
+    public void setDataValue(String dataValue) {
+        this.dataValue = dataValue;
     }
     
     public DataEntity getEntity() {

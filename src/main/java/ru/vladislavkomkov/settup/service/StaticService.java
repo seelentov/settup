@@ -10,8 +10,8 @@ public interface StaticService {
     public static final Path JS_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "js");
     public static final Path CSS_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "css");
     
-    public static final Path JS_ADMIN_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "admin", "js");
-    public static final Path CSS_ADMIN_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "admin", "css");
+    public static final Path JS_ADMIN_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "templates/admin", "js");
+    public static final Path CSS_ADMIN_FOLDER_PATH = Path.of(String.valueOf(STATIC_FOLDER_PATH), "templates/admin", "css");
     
     List<Static> getStatics(String folderPath);
     
