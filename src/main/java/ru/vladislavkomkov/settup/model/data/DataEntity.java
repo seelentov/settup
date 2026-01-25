@@ -19,44 +19,52 @@ public class DataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DataField> dataFields;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "data_topic_id")
     private DataTopic topic;
-    
+
     private boolean isActive = true;
-    
+
+    public DataEntity() {
+    }
+
+    public DataEntity(DataTopic topic, List<DataField> dataFields) {
+        this.topic = topic;
+        this.dataFields = dataFields;
+    }
+
     public int getId() {
         return id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public List<DataField> getFields() {
         return dataFields;
     }
-    
+
     public void setFields(List<DataField> dataFields) {
         this.dataFields = dataFields;
     }
-    
+
     public DataTopic getTopic() {
         return topic;
     }
-    
+
     public void setTopic(DataTopic topic) {
         this.topic = topic;
     }
-    
+
     public boolean isActive() {
         return isActive;
     }
-    
+
     public void setActive(boolean active) {
         isActive = active;
     }

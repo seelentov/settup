@@ -3,7 +3,7 @@ package ru.vladislavkomkov.settup.model.data;
 public enum DataFieldType {
     STRING,
     DATE,
-    INT,
+    NUMBER,
     SOURCE,
     
     LIST_STRING,

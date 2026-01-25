@@ -3,37 +3,25 @@ package ru.vladislavkomkov.settup.model.query;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "query_rows")
-public class QueryRow {
+@Table(name = "query_sorts")
+public class QuerySort {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private QueryType type;
-
     private String qKey;
-    private String qValue;
-
+    private SortDirection direction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "query_id")
     private Query query;
 
-    public QueryRow() {
+    public QuerySort() {
     }
 
-    public QueryRow(String qKey, QueryType type, String qValue) {
-        this.type = type;
-        this.qValue = qValue;
+    public QuerySort(String qKey, SortDirection direction) {
         this.qKey = qKey;
-    }
-
-    public QueryType getType() {
-        return type;
-    }
-
-    public String getqValue() {
-        return qValue;
+        this.direction = direction;
     }
 
     public int getId() {
@@ -50,6 +38,14 @@ public class QueryRow {
 
     public void setqKey(String qKey) {
         this.qKey = qKey;
+    }
+
+    public SortDirection getDirection() {
+        return direction;
+    }
+
+    public void setDirection(SortDirection direction) {
+        this.direction = direction;
     }
 
     public Query getQuery() {
