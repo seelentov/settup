@@ -1,23 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <title>HTML base Tag Example</title>
-    <!-- Sets the base URL for all relative links in this document -->
-    <base href="https://www.example.com/" target="_blank">
 </head>
 <body>
 
-<h1>Welcome to the Website</h1>
-
-<!-- This link will go to https://www.example.com/about.html and open in a new tab -->
-<a href="about.html">About Us</a><br>
-<a href="about.html">About Us</a><br>
-
-<!-- This link will go to https://www.example.com/contact.html and open in a new tab -->
-<a href="contact.html">Contact Us</a>
-
-<!-- This image will try to load from https://www.example.com/images/logo.png -->
-<img src="images/logo.png" alt="Logo">
+<div th:if="${param.error}">
+    Неверное имя или пароль!
+</div>
+<form th:action="@{/admin/login}" method="post">
+    <input type="text" name="username"/>
+    <input type="password" name="password"/>
+    <button type="submit">Войти</button>
+</form>
 
 </body>
 </html>

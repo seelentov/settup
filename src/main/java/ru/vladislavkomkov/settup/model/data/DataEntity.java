@@ -1,4 +1,4 @@
-package ru.vladislavkomkov.settup.model;
+package ru.vladislavkomkov.settup.model.data;
 
 import java.util.List;
 

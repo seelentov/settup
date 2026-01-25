@@ -2,25 +2,31 @@ package ru.vladislavkomkov.settup.model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+import ru.vladislavkomkov.settup.model.query.Query;
 
 @Entity
 @Table(name = "pages", uniqueConstraints = @UniqueConstraint(columnNames = "url"))
 public class Page {
+    public static final String HOME_PAGE_PATH = "";
+    public static final String HOME_PAGE_TEMPLATE = "index";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
     private String templateLink;
     private String url;
-    
+
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Query> queries;
+
     private boolean isActive = true;
-    
+
+    public Page(){
+
+    }
+
     public Page(String url, String templateLink) {
         this.url = url;
         this.templateLink = templateLink;
@@ -56,5 +62,13 @@ public class Page {
     
     public void setTemplateLink(String templateLink) {
         this.templateLink = templateLink;
+    }
+
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public void setQueries(List<Query> queries) {
+        this.queries = queries;
     }
 }

@@ -1,19 +1,25 @@
 package ru.vladislavkomkov.settup.model;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
 public class Role {
-    public static final String ADMIN = "ADMIN";
+    public static final String OWNER = "OWNER";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
+
+    public Role() {
+
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;

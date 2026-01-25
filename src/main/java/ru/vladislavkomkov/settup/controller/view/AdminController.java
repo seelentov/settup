@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     @GetMapping("/login")
-    public String loginView(Model model) {
+    public String login() {
         return "admin/login";
+    }
+
+    @GetMapping
+    public String admin() {
+        return "admin/index";
     }
 }

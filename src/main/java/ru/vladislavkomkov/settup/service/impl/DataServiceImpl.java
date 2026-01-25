@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.vladislavkomkov.settup.exception.NotFoundException;
-import ru.vladislavkomkov.settup.model.DataEntity;
-import ru.vladislavkomkov.settup.model.DataField;
-import ru.vladislavkomkov.settup.model.DataTopic;
-import ru.vladislavkomkov.settup.model.DataTopicField;
+import ru.vladislavkomkov.settup.model.data.DataEntity;
+import ru.vladislavkomkov.settup.model.data.DataField;
+import ru.vladislavkomkov.settup.model.data.DataTopic;
+import ru.vladislavkomkov.settup.model.data.DataTopicField;
 import ru.vladislavkomkov.settup.repository.DataEntityRepository;
 import ru.vladislavkomkov.settup.repository.DataFieldRepository;
 import ru.vladislavkomkov.settup.repository.DataTopicRepository;

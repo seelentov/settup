@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import ru.vladislavkomkov.settup.model.DataEntity;
-import ru.vladislavkomkov.settup.model.DataTopic;
-import ru.vladislavkomkov.settup.model.DataTopicField;
+import ru.vladislavkomkov.settup.model.data.DataEntity;
+import ru.vladislavkomkov.settup.model.data.DataTopic;
+import ru.vladislavkomkov.settup.model.data.DataTopicField;
 
 public interface DataService {
     List<DataTopic> getTopics();
