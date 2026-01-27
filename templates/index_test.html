@@ -5,15 +5,6 @@
 </head>
 <body>
 <h1>Административная панель TEST</h1>
-<h2>TEST3</h2>
-<div th:if="${test3 != null}">
-    <p th:text="${test3.string}">String</p>
-    <p th:text="${test3.source}">Source</p>
-    <p th:text="${test3.number}">Number</p>
-    <p th:text="${test3.date}">Date</p>
-    <p th:text="${#dates.format(test3.date, 'dd.MM.yyyy HH:mm')}">Date Formated</p>
-</div>
-<hr/>
 <h2>TEST2</h2>
 <div th:if="${test2 != null}">
     <p th:text="${test2.string}">String</p>
@@ -36,6 +27,15 @@
 
 <h2>TEST0 LIST</h2>
 <div th:each="entity: ${test0}">
+    <p th:text="${entity.string}">String</p>
+    <p th:text="${entity.source}">Source</p>
+    <p th:text="${entity.number}">Number</p>
+    <p th:text="${entity.date}">Date</p>
+    <p th:text="${#dates.format(entity.date, 'dd.MM.yyyy HH:mm')}">Date Formated</p>
+</div>
+
+<h2>TEST3 LIST</h2>
+<div th:each="entity: ${test3}">
     <p th:text="${entity.string}">String</p>
     <p th:text="${entity.source}">Source</p>
     <p th:text="${entity.number}">Number</p>

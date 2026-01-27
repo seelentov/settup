@@ -78,6 +78,7 @@ public class Query {
 
         if (this.topic != null) {
             queryRequest.setTopicId(this.topic.getId());
+            queryRequest.setTopicName(this.topic.getName());
         }
 
         if (this.query != null && !this.query.isEmpty()) {

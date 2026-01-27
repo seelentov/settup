@@ -16,7 +16,9 @@ public interface DataService {
     List<DataTopic> getTopics();
 
     List<DataEntity> getTopic(String topicName);
-
+    
+    List<DataTopicField> getTopicScheme(String topicName);
+    
     Optional<DataEntity> getEntity(int id);
 
     DataTopic addTopic(String topicName, List<DataTopicField> scheme);

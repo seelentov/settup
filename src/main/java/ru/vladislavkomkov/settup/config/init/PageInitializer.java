@@ -87,8 +87,8 @@ public class PageInitializer implements CommandLineRunner {
                 query3.setTopic(testTopic);
 
                 List<QueryRow> rows3 = List.of(
-                        new QueryRow("date", QueryType.LESS, new Date(10 * Instant.now().toEpochMilli()).toString()),
-                        new QueryRow("date", QueryType.MORE, new Date(9 * Instant.now().toEpochMilli()).toString())
+                        new QueryRow("date", QueryType.LESS, "Fri Jan 16 11:00:50 YEKT 4381"),
+                        new QueryRow("date", QueryType.MORE, "Fri Jun 24 01:31:14 YEKT 3932")
                 );
 
                 for (QueryRow row : rows3) {
@@ -115,7 +115,7 @@ public class PageInitializer implements CommandLineRunner {
 
                 query4.setSorts(rows4);
                 query4.setPageCount(0);
-                query4.setPageSize(1);
+                query4.setPageSize(10);
                 queries.add(query4);
 
                 page.setQueries(queries);
