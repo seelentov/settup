@@ -5,7 +5,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "data_topics")
+@Table(name = "data_topics", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class DataTopic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

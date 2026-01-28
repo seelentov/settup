@@ -7,12 +7,25 @@ import java.util.List;
 
 public class QueryRequest {
     private Integer topicId;
+    private List<String> fields = new ArrayList<>();
     private List<Filter> filters = new ArrayList<>();
     private List<Sort> sorts = new ArrayList<>();
     private Integer page;
     private Integer size;
 
     public QueryRequest() {
+    }
+
+    public boolean isSingle() {
+        return page == 0 && size == 1;
+    }
+
+    public List<String> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<String> fields) {
+        this.fields = fields;
     }
 
     public static class Filter {

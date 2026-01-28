@@ -36,22 +36,28 @@ public class PagesController {
         }
 
         for (Query query : indexPage.get().getQueries()) {
-            org.springframework.data.domain.Page<DataEntity> data = dataService.executeTypedQuery(query.toQueryRequest());
-            List<Map<String, Object>> mapped = dataService.parse(data.stream().toList());
-            Object res;
-            if (query.isSingle()) {
-                if (mapped.isEmpty()) {
-                    res = null;
-                } else {
-                    res = mapped.get(0);
-                }
-            } else {
-                res = mapped;
-            }
-
-            model.addAttribute(query.getName(), res);
+            Object data = dataService.executeQuery(query.toQueryRequest());
+            model.addAttribute(query.getName(), data);
         }
 
         return indexPage.get().getTemplateLink();
+    }
+
+    @GetMapping("/**")
+    public String page(HttpServletRequest request, Model model) {
+        String uri = request.getRequestURI();
+        String queryString = request.getQueryString();
+
+        Optional<Page> page = pageService.getPage(uri);
+        if (page.isEmpty()) {
+            throw new NotFoundException("Page "+uri+" not found");
+        }
+
+        for (Query query : page.get().getQueries()) {
+            Object data = dataService.executeQuery(query.toQueryRequest());
+            model.addAttribute(query.getName(), data);
+        }
+
+        return page.get().getTemplateLink();
     }
 }

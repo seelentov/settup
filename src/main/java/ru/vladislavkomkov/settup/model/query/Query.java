@@ -29,6 +29,14 @@ public class Query {
     @JoinColumn(name = "page_id")
     private Page page;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "query_fields",
+            joinColumns = @JoinColumn(name = "query_id")
+    )
+    @Column(name = "field_name")
+    private List<String> fields = new ArrayList<>();
+
     private int pageCount;
 
     private int pageSize;
@@ -78,6 +86,10 @@ public class Query {
 
         if (this.topic != null) {
             queryRequest.setTopicId(this.topic.getId());
+        }
+
+        if (this.fields != null) {
+            queryRequest.setFields(this.fields);
         }
 
         if (this.query != null && !this.query.isEmpty()) {
@@ -148,5 +160,13 @@ public class Query {
 
     public void setSorts(List<QuerySort> sorts) {
         this.sorts = sorts;
+    }
+
+    public List<String> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<String> fields) {
+        this.fields = fields;
     }
 }

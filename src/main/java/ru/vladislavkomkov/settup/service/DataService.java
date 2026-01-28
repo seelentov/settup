@@ -17,6 +17,8 @@ public interface DataService {
 
     List<DataEntity> getTopic(String topicName);
 
+    List<DataTopicField> getTopicScheme(String topicName);
+
     Optional<DataEntity> getEntity(int id);
 
     DataTopic addTopic(String topicName, List<DataTopicField> scheme);
@@ -25,9 +27,7 @@ public interface DataService {
 
     void editEntity(int id, Map<String, String> data);
 
-    Page<DataEntity> executeTypedQuery(QueryRequest queryRequest);
+    List<Map<String, Object>> executeTypedQuery(QueryRequest queryRequest);
 
-    List<Map<String, Object>> parse(List<DataEntity> entities);
-
-    Map<String, Object> parse(DataEntity entity);
+    Object executeQuery(QueryRequest query);
 }

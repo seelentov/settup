@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "data_fields")
 public class DataField {
+    public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

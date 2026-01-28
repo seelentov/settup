@@ -3,6 +3,7 @@ package ru.vladislavkomkov.settup.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class AdminSecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/admin/**").hasRole("OWNER")
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/rest/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
@@ -39,15 +41,10 @@ public class AdminSecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/admin/login")
-                )
                 .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable) // H2 требует frames
-                );
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                )
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

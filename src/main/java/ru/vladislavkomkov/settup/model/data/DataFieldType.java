@@ -5,9 +5,4 @@ public enum DataFieldType {
     DATE,
     NUMBER,
     SOURCE,
-    
-    LIST_STRING,
-    LIST_DATE,
-    LIST_INT,
-    LIST_SOURCE
 }

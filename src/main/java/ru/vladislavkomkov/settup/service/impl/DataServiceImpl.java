@@ -6,19 +6,20 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.vladislavkomkov.settup.exception.DataParseException;
+import ru.vladislavkomkov.settup.exception.DuplicateException;
 import ru.vladislavkomkov.settup.exception.NotFoundException;
 import ru.vladislavkomkov.settup.model.data.*;
 import ru.vladislavkomkov.settup.model.query.*;
 import ru.vladislavkomkov.settup.repository.DataEntityRepository;
 import ru.vladislavkomkov.settup.repository.DataFieldRepository;
 import ru.vladislavkomkov.settup.repository.DataTopicRepository;
-import ru.vladislavkomkov.settup.repository.specification.DataEntitySpecifications;
+import ru.vladislavkomkov.settup.service.DataQueryExecutorService;
 import ru.vladislavkomkov.settup.service.DataService;
+
+import static ru.vladislavkomkov.settup.model.data.DataField.DATE_FORMAT;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -26,10 +27,13 @@ public class DataServiceImpl implements DataService {
     private final DataEntityRepository entityRepository;
     private final DataFieldRepository fieldRepository;
 
-    public DataServiceImpl(DataTopicRepository topicRepository, DataEntityRepository entityRepository, DataFieldRepository fieldRepository) {
+    private final DataQueryExecutorService queryExecutor;
+
+    public DataServiceImpl(DataTopicRepository topicRepository, DataEntityRepository entityRepository, DataFieldRepository fieldRepository, DataQueryExecutorService queryExecutor) {
         this.topicRepository = topicRepository;
         this.entityRepository = entityRepository;
         this.fieldRepository = fieldRepository;
+        this.queryExecutor = queryExecutor;
     }
 
     @Override
@@ -49,6 +53,10 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public DataTopic addTopic(String topicName, List<DataTopicField> scheme) {
+        if (topicRepository.findByName(topicName).isPresent()) {
+            throw new DuplicateException("Topic " + topicName + " already exists");
+        }
+
         DataTopic topic = new DataTopic();
         topic.setName(topicName);
 
@@ -106,126 +114,33 @@ public class DataServiceImpl implements DataService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Page<DataEntity> executeTypedQuery(QueryRequest queryRequest) {
-        validateQueryRequest(queryRequest);
-
-        Specification<DataEntity> spec = createTypedSpecification(queryRequest);
-
-        Pageable pageable = createTypedPageable(queryRequest);
-
-        return entityRepository.findAll(spec, pageable);
+    public List<Map<String, Object>> executeTypedQuery(QueryRequest queryRequest) {
+        return queryExecutor.executeQuery(queryRequest);
     }
 
-    private void validateQueryRequest(QueryRequest queryRequest) {
-        if (queryRequest.getTopicId() == null) {
-            throw new IllegalArgumentException("Topic ID is required");
+    public Object executeQuery(QueryRequest queryRequest) {
+        List<Map<String, Object>> mapped = executeTypedQuery(queryRequest);
+        Object res;
+        if (queryRequest.isSingle()) {
+            if (mapped.isEmpty()) {
+                res = null;
+            } else {
+                res = mapped.get(0);
+            }
+        } else {
+            res = mapped;
         }
 
-        Optional<DataTopic> topicOpt = topicRepository.findById(queryRequest.getTopicId());
+        return res;
+    }
+
+    public List<DataTopicField> getTopicScheme(String topicName) {
+        Optional<DataTopic> topicOpt = topicRepository.findByName(topicName);
+
         if (topicOpt.isEmpty()) {
-            throw new IllegalArgumentException("Topic not found");
+            throw new NotFoundException("Topic " + topicName + " not found");
         }
 
-        DataTopic topic = topicOpt.get();
-        Map<String, DataFieldType> fieldTypes = getFieldTypes(topic);
-
-        for (QueryRequest.Filter filter : queryRequest.getFilters()) {
-            DataFieldType fieldType = fieldTypes.get(filter.getFieldName());
-            if (fieldType == null) {
-                throw new IllegalArgumentException("Field '" + filter.getFieldName() + "' not found in topic schema");
-            }
-
-            validateOperatorForType(filter.getOperator(), fieldType);
-        }
-
-        for (QueryRequest.Sort sort : queryRequest.getSorts()) {
-            if (!fieldTypes.containsKey(sort.getFieldName())) {
-                throw new IllegalArgumentException("Field '" + sort.getFieldName() + "' not found in topic schema");
-            }
-        }
-    }
-
-    private Map<String, DataFieldType> getFieldTypes(DataTopic topic) {
-        Map<String, DataFieldType> fieldTypes = new HashMap<>();
-        if (topic.getScheme() != null) {
-            for (DataTopicField field : topic.getScheme()) {
-                fieldTypes.put(field.getName(), field.getType());
-            }
-        }
-        return fieldTypes;
-    }
-
-    private void validateOperatorForType(QueryType operator, DataFieldType fieldType) {
-        if ((operator == QueryType.MORE || operator == QueryType.LESS) && (fieldType == DataFieldType.STRING || fieldType == DataFieldType.SOURCE)) {
-            throw new IllegalArgumentException("Operator " + operator + " cannot be applied to field type " + fieldType);
-        }
-    }
-
-    private Specification<DataEntity> createTypedSpecification(QueryRequest queryRequest) {
-        return Specification.where(DataEntitySpecifications.hasTopicId(queryRequest.getTopicId())).and(DataEntitySpecifications.applyFilters(queryRequest.getFilters()));
-    }
-
-    private Pageable createTypedPageable(QueryRequest queryRequest) {
-        org.springframework.data.domain.Sort sort = org.springframework.data.domain.Sort.unsorted();
-
-        if (queryRequest.getSorts() != null && !queryRequest.getSorts().isEmpty()) {
-            for (QueryRequest.Sort sortObj : queryRequest.getSorts()) {
-                org.springframework.data.domain.Sort.Direction direction = sortObj.getDirection() == SortDirection.DESC ? org.springframework.data.domain.Sort.Direction.DESC : org.springframework.data.domain.Sort.Direction.ASC;
-
-                sort = sort.and(org.springframework.data.domain.Sort.by(direction, createSortExpression(sortObj.getFieldName())));
-            }
-        }
-
-        int page = queryRequest.getPage() != null ? queryRequest.getPage() : 0;
-        int size = queryRequest.getSize() != null && queryRequest.getSize() != 0 ? queryRequest.getSize() : Integer.MAX_VALUE;
-
-        return org.springframework.data.domain.PageRequest.of(page, size, sort);
-    }
-
-    private String createSortExpression(String fieldName) {
-        return "dataFields." + fieldName;
-    }
-
-    public List<Map<String, Object>> parse(List<DataEntity> entities) {
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        for (DataEntity entity : entities) {
-            result.add(parse(entity));
-        }
-
-        return result;
-    }
-
-    public Map<String, Object> parse(DataEntity entity) {
-        Map<String, Object> object = new HashMap<>();
-
-        for (DataField field : entity.getFields()) {
-            Object value = convertToTypedValue(field.getDataValue(), field.getType());
-            object.put(field.getName(), value);
-        }
-
-        return object;
-    }
-
-    private Object convertToTypedValue(String value, DataFieldType type) {
-        try {
-            switch (type) {
-                case NUMBER:
-                    if (value.contains(".")) {
-                        return Float.parseFloat(value);
-                    } else {
-                        return Integer.parseInt(value);
-                    }
-
-                case DATE:
-                    return new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).parse(value);
-
-                default:
-                    return value;
-            }
-        } catch (Exception e) {
-            throw new DataParseException(e);
-        }
+        return topicOpt.get().getScheme();
     }
 }
