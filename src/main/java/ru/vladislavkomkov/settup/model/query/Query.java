@@ -1,8 +1,8 @@
 package ru.vladislavkomkov.settup.model.query;
 
 import jakarta.persistence.*;
-import ru.vladislavkomkov.settup.model.Page;
 import ru.vladislavkomkov.settup.model.data.DataTopic;
+import ru.vladislavkomkov.settup.model.page.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ public class Query {
     private DataTopic topic;
 
     @OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<QueryRow> query;
+    private List<QueryRow> query = new ArrayList<>();
 
     @OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<QuerySort> sorts;
+    private List<QuerySort> sorts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id")

@@ -15,7 +15,9 @@ import ru.vladislavkomkov.settup.model.query.QueryRequest;
 public interface DataService {
     List<DataTopic> getTopics();
 
-    List<DataEntity> getTopic(String topicName);
+    Optional<DataTopic> getTopic(String topicName);
+
+    List<DataEntity> getTopicData(String topicName);
 
     List<DataTopicField> getTopicScheme(String topicName);
 

@@ -2,7 +2,7 @@ package ru.vladislavkomkov.settup.controller.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.vladislavkomkov.settup.model.Page;
+import ru.vladislavkomkov.settup.model.page.Page;
 import ru.vladislavkomkov.settup.model.data.DataTopic;
 import ru.vladislavkomkov.settup.model.query.QueryRequest;
 import ru.vladislavkomkov.settup.service.DataService;

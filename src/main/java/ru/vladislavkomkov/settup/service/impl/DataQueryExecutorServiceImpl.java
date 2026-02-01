@@ -215,7 +215,7 @@ public class DataQueryExecutorServiceImpl implements DataQueryExecutorService {
         }
 
         private void buildPagination(StringBuilder sql) {
-            if (request.getPage() != null && request.getSize() != null) {
+            if (request.getPage() != null && request.getSize() != null && request.getSize() != 0) {
                 int offset = request.getPage() * request.getSize();
                 sql.append("LIMIT :limit OFFSET :offset\n");
                 parameters.addValue("limit", request.getSize());

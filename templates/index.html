@@ -5,5 +5,15 @@
 </head>
 <body>
 <h1>Базовая страница</h1>
+<ul>
+    <li th:each="item : ${query}">
+        <ul>
+            <p th:text="${item.string}">string</p>
+            <p th:text="${item.source}">source</p>
+            <p th:text="${item.date}">date</p>
+            <p th:text="${item.number}">number</p>
+        </ul>
+    </li>
+</ul>
 </body>
 </html>

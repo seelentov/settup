@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vladislavkomkov.settup.exception.DataParseException;
 import ru.vladislavkomkov.settup.exception.DuplicateException;
 import ru.vladislavkomkov.settup.exception.NotFoundException;
 import ru.vladislavkomkov.settup.model.data.*;
@@ -18,8 +17,6 @@ import ru.vladislavkomkov.settup.repository.DataFieldRepository;
 import ru.vladislavkomkov.settup.repository.DataTopicRepository;
 import ru.vladislavkomkov.settup.service.DataQueryExecutorService;
 import ru.vladislavkomkov.settup.service.DataService;
-
-import static ru.vladislavkomkov.settup.model.data.DataField.DATE_FORMAT;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -42,7 +39,12 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public List<DataEntity> getTopic(String topicName) {
+    public Optional<DataTopic> getTopic(String topicName) {
+        return topicRepository.findByName(topicName);
+    }
+
+    @Override
+    public List<DataEntity> getTopicData(String topicName) {
         return entityRepository.findByTopicName(topicName);
     }
 
