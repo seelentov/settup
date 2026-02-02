@@ -1,8 +1,10 @@
 package ru.vladislavkomkov.settup.model.data;
 
 import jakarta.persistence.*;
+import ru.vladislavkomkov.settup.exception.data.DataParseException;
 
 import java.math.BigDecimal; // Используем BigDecimal для чисел, если нужна высокая точность
+import java.time.Instant;
 import java.time.LocalDateTime; // Или java.util.Date/java.sql.Timestamp
 
 @Entity
@@ -17,8 +19,15 @@ public class DataField {
     @Enumerated(EnumType.STRING)
     private DataFieldType type;
 
+    private int intValue;
+    private long longValue;
+
+    private float floatValue;
+    private double doubleValue;
+
     private String stringValue;
-    private Long numberValue;
+
+    private Instant instantValue;
 
     private boolean isActive = true;
 
@@ -75,58 +84,75 @@ public class DataField {
         this.entity = entity;
     }
 
-    public String getStringValue() {
-        return stringValue;
+    public void setValue(Object value) {
+        switch (this.type) {
+            case INT -> this.intValue = (int) value;
+            case LONG -> this.longValue = (long) value;
+            case FLOAT -> this.floatValue = (float) value;
+            case DOUBLE -> this.doubleValue = (double) value;
+            case STRING, SOURCE -> this.stringValue = (String) value;
+            case DATE -> this.instantValue = (Instant) value;
+            default -> throw new DataParseException("Unexpected field type");
+        }
     }
 
-    public Long getNumberValue() {
-        return numberValue;
+    public Object getValue() {
+        return switch (this.type) {
+            case INT -> this.intValue;
+            case LONG -> this.longValue;
+            case FLOAT -> this.floatValue;
+            case DOUBLE -> this.doubleValue;
+            case STRING, SOURCE -> this.stringValue;
+            case DATE -> this.instantValue;
+            default -> throw new DataParseException("Unexpected field type");
+        };
+    }
+
+    public int getIntValue() {
+        return intValue;
+    }
+
+    public void setIntValue(int intValue) {
+        this.intValue = intValue;
+    }
+
+    public long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(long longValue) {
+        this.longValue = longValue;
+    }
+
+    public float getFloatValue() {
+        return floatValue;
+    }
+
+    public void setFloatValue(float floatValue) {
+        this.floatValue = floatValue;
+    }
+
+    public double getDoubleValue() {
+        return doubleValue;
+    }
+
+    public void setDoubleValue(double doubleValue) {
+        this.doubleValue = doubleValue;
+    }
+
+    public String getStringValue() {
+        return stringValue;
     }
 
     public void setStringValue(String stringValue) {
         this.stringValue = stringValue;
     }
 
-    public void setNumberValue(Long numberValue) {
-        this.numberValue = numberValue;
+    public Instant getInstantValue() {
+        return instantValue;
     }
 
-    public void setValue(Object value) {
-        switch (this.type) {
-            case STRING:
-            case SOURCE:
-                this.stringValue = value instanceof String ? (String) value : (value != null ? value.toString() : null);
-                break;
-            case NUMBER:
-            case DATE:
-                if (value instanceof Number) {
-                    this.numberValue = ((Number) value).longValue();
-                } else if (value instanceof String) {
-                    try {
-                        this.numberValue = Long.parseLong((String) value);
-                    } catch (NumberFormatException e) {
-                        this.numberValue = null;
-                    }
-                } else {
-                    this.numberValue = null;
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Неизвестный тип поля: " + this.type);
-        }
+    public void setInstantValue(Instant instantValue) {
+        this.instantValue = instantValue;
     }
-
-    public Object getValue() {
-        switch (this.type) {
-            case STRING:
-            case SOURCE:
-                return this.stringValue;
-            case NUMBER:
-            case DATE:
-                return this.numberValue;
-            default:
-                return null;
-        }
-    }
-
 }

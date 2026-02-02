@@ -70,12 +70,12 @@ public class PageInitializer implements CommandLineRunner {
         String numberFieldName = "number";
 
         try {
-            List<DataTopicField> fields = List.of(new DataTopicField(stringFieldName, DataFieldType.STRING), new DataTopicField(sourceFieldName, DataFieldType.SOURCE), new DataTopicField(dateFieldName, DataFieldType.DATE), new DataTopicField(numberFieldName, DataFieldType.NUMBER));
+            List<DataTopicField> fields = List.of(new DataTopicField(stringFieldName, DataFieldType.STRING), new DataTopicField(sourceFieldName, DataFieldType.SOURCE), new DataTopicField(dateFieldName, DataFieldType.DATE), new DataTopicField(numberFieldName, DataFieldType.INT));
 
             dataService.addTopic(testTopicName, fields);
 
             for (int i = 0; i < 100; i++) {
-                dataService.addEntity(testTopicName, List.of(new DataField(stringFieldName, DataFieldType.STRING, "test" + i), new DataField(sourceFieldName, DataFieldType.SOURCE, "/static/admin/admin.js"), new DataField(dateFieldName, DataFieldType.DATE, new Date(i * Instant.now().toEpochMilli()).toString()), new DataField(numberFieldName, DataFieldType.NUMBER, "" + i)));
+                dataService.addEntity(testTopicName, List.of(new DataField(stringFieldName, DataFieldType.STRING, "test" + i), new DataField(sourceFieldName, DataFieldType.SOURCE, "/static/admin/admin.js"), new DataField(dateFieldName, DataFieldType.DATE, new Date(i * Instant.now().toEpochMilli()).toString()), new DataField(numberFieldName, DataFieldType.INT, "" + i)));
             }
         } catch (DuplicateException ex) {
             log.debug(String.valueOf(ex));

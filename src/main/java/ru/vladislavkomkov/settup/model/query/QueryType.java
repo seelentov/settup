@@ -2,10 +2,14 @@ package ru.vladislavkomkov.settup.model.query;
 
 public enum QueryType {
     EQUALS,
-    CONTAINS,
     NOT_EQUALS,
-    GREATER_THAN,
-    LESS_THAN,
+
+    CONTAINS,
+    NOT_CONTAINS,
+
+    GREATER,
     GREATER_OR_EQUAL,
+
+    LESS,
     LESS_OR_EQUAL
 }
