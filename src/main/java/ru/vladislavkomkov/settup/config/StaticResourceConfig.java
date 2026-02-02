@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import ru.vladislavkomkov.settup.service.StaticService;
+import ru.vladislavkomkov.settup.service.sttc.StaticService;
 
 @Configuration
 public class StaticResourceConfig implements WebMvcConfigurer {

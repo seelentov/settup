@@ -4,15 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.vladislavkomkov.settup.exception.NotFoundException;
 import ru.vladislavkomkov.settup.model.page.Page;
 import ru.vladislavkomkov.settup.model.page.PageMatch;
 import ru.vladislavkomkov.settup.model.query.Query;
 import ru.vladislavkomkov.settup.model.query.QueryRequest;
-import ru.vladislavkomkov.settup.service.DataService;
-import ru.vladislavkomkov.settup.service.PageService;
+import ru.vladislavkomkov.settup.service.data.DataService;
+import ru.vladislavkomkov.settup.service.page.PageService;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,27 +1,24 @@
 package ru.vladislavkomkov.settup.model.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal; // Используем BigDecimal для чисел, если нужна высокая точность
+import java.time.LocalDateTime; // Или java.util.Date/java.sql.Timestamp
 
 @Entity
 @Table(name = "data_fields")
 public class DataField {
-    public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
-    private String dataValue;
 
+    @Enumerated(EnumType.STRING)
     private DataFieldType type;
+
+    private String stringValue;
+    private Long numberValue;
 
     private boolean isActive = true;
 
@@ -29,12 +26,13 @@ public class DataField {
     @JoinColumn(name = "data_entity_id")
     private DataEntity entity;
 
-    public DataField(){}
+    public DataField() {
+    }
 
-    public DataField(String name, DataFieldType type, String dataValue) {
+    public DataField(String name, DataFieldType type, Object rawValue) {
         this.name = name;
         this.type = type;
-        this.dataValue = dataValue;
+        setValue(rawValue);
     }
 
     public int getId() {
@@ -53,22 +51,6 @@ public class DataField {
         this.name = name;
     }
 
-    public String getDataValue() {
-        return dataValue;
-    }
-
-    public void setDataValue(String dataValue) {
-        this.dataValue = dataValue;
-    }
-
-    public DataEntity getEntity() {
-        return entity;
-    }
-
-    public void setEntity(DataEntity entity) {
-        this.entity = entity;
-    }
-
     public DataFieldType getType() {
         return type;
     }
@@ -82,6 +64,69 @@ public class DataField {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
     }
+
+    public DataEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(DataEntity entity) {
+        this.entity = entity;
+    }
+
+    public String getStringValue() {
+        return stringValue;
+    }
+
+    public Long getNumberValue() {
+        return numberValue;
+    }
+
+    public void setStringValue(String stringValue) {
+        this.stringValue = stringValue;
+    }
+
+    public void setNumberValue(Long numberValue) {
+        this.numberValue = numberValue;
+    }
+
+    public void setValue(Object value) {
+        switch (this.type) {
+            case STRING:
+            case SOURCE:
+                this.stringValue = value instanceof String ? (String) value : (value != null ? value.toString() : null);
+                break;
+            case NUMBER:
+            case DATE:
+                if (value instanceof Number) {
+                    this.numberValue = ((Number) value).longValue();
+                } else if (value instanceof String) {
+                    try {
+                        this.numberValue = Long.parseLong((String) value);
+                    } catch (NumberFormatException e) {
+                        this.numberValue = null;
+                    }
+                } else {
+                    this.numberValue = null;
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Неизвестный тип поля: " + this.type);
+        }
+    }
+
+    public Object getValue() {
+        switch (this.type) {
+            case STRING:
+            case SOURCE:
+                return this.stringValue;
+            case NUMBER:
+            case DATE:
+                return this.numberValue;
+            default:
+                return null;
+        }
+    }
+
 }
