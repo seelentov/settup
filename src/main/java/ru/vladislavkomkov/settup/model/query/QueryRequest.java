@@ -7,6 +7,7 @@ import java.util.List;
 
 public class QueryRequest {
     private Integer topicId;
+    private String topicName;
     private List<String> fields = new ArrayList<>();
     private List<Filter> filters = new ArrayList<>();
     private List<Sort> sorts = new ArrayList<>();
@@ -27,7 +28,15 @@ public class QueryRequest {
     public void setFields(List<String> fields) {
         this.fields = fields;
     }
-
+    
+    public String getTopicName() {
+        return topicName;
+    }
+    
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+    
     public static class Filter {
         private String fieldName;
         private QueryType operator;
